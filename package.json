@@ -1,0 +1,9 @@
+{
+  "name": "rfid-client",
+  "version": "0.0.1",
+  "main": "dist/angularjs/index.html",
+  "window":{
+    "kiosk": false,
+    "toolbar": true
+  }
+}

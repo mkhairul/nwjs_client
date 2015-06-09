@@ -1,0 +1,24 @@
+.brand-logo span{
+  line-height: 30px;
+  display: block;
+}
+
+#sign-in .logo{
+  margin-top: 0;
+}
+
+.dashboard-actions .col .card-panel{
+  margin-bottom: 10px;
+}
+
+.dashboard-actions .col a{ display: block; }
+
+.paid, .unpaid{
+    padding: 5px;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+}
+.paid .fa, .unpaid .fa{ margin-right: 3px; }
+.DTTT_container{ float: left; }
+.add-points .input-field, .remove-points .input-field{ margin-top: 0; }
+.add-points .input-field input, .remove-points .input-field input{ margin-bottom: 0; }
