@@ -1,5 +1,5 @@
 (function (angular) {
-    angular.module("ui.materialize", ["ui.materialize.ngModel", "ui.materialize.collapsible", "ui.materialize.toast", "ui.materialize.sidenav", "ui.materialize.material_select", "ui.materialize.dropdown", "ui.materialize.inputfield", "ui.materialize.input_date", "ui.materialize.tabs", "ui.materialize.pagination"]);
+    angular.module("ui.materialize", ["ui.materialize.ngModel", "ui.materialize.collapsible", "ui.materialize.toast", "ui.materialize.sidenav", "ui.materialize.material_select", "ui.materialize.dropdown", "ui.materialize.inputfield", "ui.materialize.input_date", "ui.materialize.tabs", "ui.materialize.pagination", "ui.materialize.pushpin", "ui.materialize.parallax","ui.materialize.modal"]);
 
     angular.module("ui.materialize.ngModel", [])
         .directive("ngModel",["$timeout", function($timeout){
@@ -18,7 +18,7 @@
                         });
                     });
                 }
-            }
+            };
         }]);
 
     angular.module("ui.materialize.collapsible", [])
@@ -32,6 +32,17 @@
           };
         }]);
 
+    angular.module("ui.materialize.parallax", [])
+        .directive("parallax", ["$timeout", function($timeout){
+            return {
+                link: function(scope, element, attrs) {
+                    $timeout(function(){
+                        element.parallax();
+                    });
+                }
+            };
+        }]);
+
     angular.module("ui.materialize.toast", [])
         .constant("toastConfig", {
             duration: 3000,
@@ -40,15 +51,36 @@
         .directive("toast", ["toastConfig", function (toastConfig) {
             return {
                 scope: {
-                    message: "@"
+                    message: "@",
+                    duration: "@"
                 },
                 link: function (scope, element, attrs) {
-
                     element.bind(attrs.toast, function () {
                         var message = (angular.isDefined(scope.message)) ? scope.message : "";
                         var rounded = (angular.isDefined(attrs.rounded)) ? toastConfig.rounded : null;
-                        toast(message, toastConfig.duration, rounded);
+                        Materialize.toast(message, scope.duration ? scope.duration : toastConfig.duration, rounded);
                     });
+                }
+            };
+        }]);
+
+    angular.module('ui.materialize.pushpin', [])
+        .directive('pushpin', [function(){
+            return {
+                restrict: 'AE',
+                require: [
+                    '?pushpinTop',
+                    '?pushpinOffset',
+                    '?pushpinBottom'
+                ],
+                link: function (scope, element, attrs) {
+                    var top    = attrs.pushpinTop || 0;
+                    var offset = attrs.pushpinOffset || 0;
+                    var bottom = attrs.pushpinBottom || Infinity;
+                    setTimeout(function () {
+                        element.pushpin({top: top, offset: offset, bottom: bottom});
+                    }, 0);
+
                 }
             };
         }]);
@@ -76,7 +108,7 @@
                         menuWidth: (angular.isDefined(scope.menuwidth)) ? scope.menuwidth : undefined,
                         edge: attrs.sidenav ? attrs.sidenav : "left",
                         closeOnClick: (angular.isDefined(scope.closeonclick)) ? scope.closeonclick == "true" : undefined
-                    })
+                    });
                 }
             };
         }]);
@@ -91,6 +123,11 @@
                         $timeout(function () {
                             element.material_select();
                         });
+                        if (attrs.ngModel) {
+                            scope.$watch(attrs.ngModel, function() {
+                                element.material_select();
+                            });
+                        }
                     }
                 }
             };
@@ -154,7 +191,7 @@
                 scope: {},
                 link: function (scope, element) {
                     $timeout(function () {
-                        angular.element(element).find("input").change();
+                        Materialize.updateTextFields();
                     });
                 },
                 template: '<div ng-transclude class="input-field"></div>'
@@ -218,7 +255,7 @@
                     }
 
                     // Passing date through Date applies Date.parse, if necessary
-                    date = date ? new Date(date) : new Date;
+                    date = date ? new Date(date) : new Date();
                     if (isNaN(date)) throw SyntaxError("invalid date");
 
                     mask = String(dF.masks[mask] || mask || dF.masks["default"]);
@@ -311,6 +348,7 @@
             return {
                 require: 'ngModel',
                 scope: {
+                    container: "@",
                     format: "@",
                     formatSubmit: "@",
                     monthsFull: "@",
@@ -345,6 +383,7 @@
                     $compile(element.contents())(scope);
                     $timeout(function () {
                         element.pickadate({
+                            container : (angular.isDefined(scope.container)) ? scope.container : 'body',
                             format: (angular.isDefined(scope.format)) ? scope.format : undefined,
                             formatSubmit: (angular.isDefined(scope.formatSubmit)) ? scope.formatSubmit : undefined,
                             monthsFull: (angular.isDefined(monthsFull)) ? monthsFull : undefined,
@@ -354,12 +393,12 @@
                             today: (angular.isDefined(scope.today)) ? scope.today : undefined,
                             clear: (angular.isDefined(scope.clear)) ? scope.clear : undefined,
                             close: (angular.isDefined(scope.close)) ? scope.close : undefined,
-                            onStart: (angular.isDefined(scope.close)) ? function(){ scope.onStart() } : undefined,
-                            onRender: (angular.isDefined(scope.close)) ? function(){ scope.onRender() } : undefined,
-                            onOpen: (angular.isDefined(scope.close)) ? function(){ scope.onOpen() } : undefined,
-                            onClose: (angular.isDefined(scope.close)) ? function(){ scope.onClose() } : undefined,
-                            onSet: (angular.isDefined(scope.close)) ? function(){ scope.onSet() } : undefined,
-                            onStop: (angular.isDefined(scope.close)) ? function(){ scope.onStop() } : undefined
+                            onStart: (angular.isDefined(scope.onStart)) ? function(){ scope.onStart(); } : undefined,
+                            onRender: (angular.isDefined(scope.onRender)) ? function(){ scope.onRender(); } : undefined,
+                            onOpen: (angular.isDefined(scope.onOpen)) ? function(){ scope.onOpen(); } : undefined,
+                            onClose: (angular.isDefined(scope.onClose)) ? function(){ scope.onClose(); } : undefined,
+                            onSet: (angular.isDefined(scope.onSet)) ? function(){ scope.onSet(); } : undefined,
+                            onStop: (angular.isDefined(scope.onStop)) ? function(){ scope.onStop(); } : undefined
                         });
                     });
                 }
@@ -448,7 +487,7 @@
 
                 // Calculate the previous page and if the click actions are allowed
                 // blocking and disabling where page <= 0
-                var disabled = scope.page - 1 <= 0
+                var disabled = scope.page - 1 <= 0;
                 var prevPage = scope.page - 1 <= 0 ? 1 : scope.page - 1;
 
                 var prev = {
@@ -625,4 +664,45 @@
                 }
             };
         });
+
+    /*     example usage:
+     <!-- Modal Trigger -->
+     <a class='btn' href='#demoModal' modal>show Modal</a>
+
+     <!-- Modal Structure -->
+     <div id="demoModal" class="modal">
+     <div class="modal-content">
+     <h4>Modal Header</h4>
+
+     <p>A bunch of text</p>
+     </div>
+     <div class="modal-footer">
+     <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+     </div>
+     </div>
+
+     */
+    angular.module("ui.materialize.modal", [])
+        .directive("modal", ["$compile", "$timeout", function ($compile, $timeout) {
+            return {
+                scope: {
+                    dismissible: "@",
+                    opacity: "@",
+                    in_duration: "@",
+                    out_duration: "@"
+                },
+                link: function (scope, element, attrs) {
+                    $compile(element.contents())(scope);
+                    $timeout(function () {
+                        element.leanModal({
+                            dismissible: (angular.isDefined(scope.dismissible)) ? scope.dismissible : undefined,
+                            opacity: (angular.isDefined(scope.opacity)) ? scope.opacity : undefined,
+                            in_duration: (angular.isDefined(scope.in_duration)) ? scope.in_duration : undefined,
+                            out_duration: (angular.isDefined(scope.out_duration)) ? scope.out_duration : undefined
+                        });
+                    });
+                }
+            };
+        }]);
+
 }(angular));

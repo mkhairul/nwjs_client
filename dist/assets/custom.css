@@ -12,6 +12,10 @@
 }
 
 .dashboard-actions .col a{ display: block; }
+.dashboard-actions .card-panel, .dashboard-actions .input-field label{
+  color: #000;
+  text-shadow: 1px 1px 2px #fff;
+}
 
 .paid, .unpaid{
     padding: 5px;
@@ -22,3 +26,25 @@
 .DTTT_container{ float: left; }
 .add-points .input-field, .remove-points .input-field{ margin-top: 0; }
 .add-points .input-field input, .remove-points .input-field input{ margin-bottom: 0; }
+
+.loading span{
+  margin-top: -25px;
+  display: inline-block;
+  height: 50px;
+  line-height: 50px;
+  vertical-align: middle;
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.full-btn{ display: block; }
+.login-form{ display: none; }
+.login-settings{
+  display: none;
+  width: 600px;
+  height: 400px;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  z-index: 99;
+}

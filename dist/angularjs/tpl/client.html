@@ -1,0 +1,57 @@
+<div class="page-title" data-ng-include="'tpl/parts/breadcrumbs.html'"></div>
+
+<div class="row">
+  <div class="card-panel" ng-show="new == true">
+      <h4>Add</h4>
+      <form ng-submit="save()">
+          <div class="row">
+              <div class="col m12 s12">
+                  <div class="input-field">
+                    <input type="text" id="access_name" class="validate" ng-model="client.name">
+                    <label for="access_name">Client Name</label>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col m12 s12">
+                  <div class="input-field">
+                    <p>
+                      <input type="radio" id="enabled" value="1" ng-model="client.enabled" />
+                      <label for="enabled">Enabled</label>
+                      <input type="radio" id="disabled" value="0" ng-model="client.enabled" />
+                      <label for="disabled">Disabled</label>
+                    </p>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col">
+                  <button class="btn" type="submit" name="action">Save</button>
+                  <a class="btn" ng-click="new = false">Close</a>
+                  <a class="waves-effect waves-dark btn red modal-trigger" href="#deleteModal" ng-click="deleteEvent()">Delete</a>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>
+
+<div class="row" ng-if="new != true">
+  <h4>Client <a class="btn-floating red waves-effect btn-small" ng-click="new()"><i class="mdi-content-add"></i></a></h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Key</th>
+        <th>Enabled</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in clientData">
+        <td>{{row.name}}</td>
+        <td>{{row.key}}</td>
+        <td>{{row.enabled}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

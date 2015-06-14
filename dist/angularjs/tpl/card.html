@@ -1,0 +1,80 @@
+<div class="page-title" data-ng-include="'tpl/parts/breadcrumbs.html'"></div>
+
+
+<div class="row card-panel">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Card UID</th>
+        <th>Activated To</th>
+        <th>DCI</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-if="card.card_list == undefined">
+        <td colspan="5" class="loading">
+          <span>Loading</span>
+          <div class="preloader-wrapper small active">
+              <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+
+              <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+
+              <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+
+              <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+        </td>
+      </tr>
+      <tr ng-repeat="row in card.card_list">
+        <td>{{ row.uid }}</td>
+        <td>{{ row.register.name }}</td>
+        <td>{{ row.register.dci }}</td>
+        <td>{{ (row.active == 1) ? 'Enabled':'Disabled' }}</td>
+        <td><a href="#" ng-if="row.active == 1" ng-click="disable(row)">Disable</a>
+            <a href="#" ng-if="row.active == 0" ng-click="enable(row)">Enable</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

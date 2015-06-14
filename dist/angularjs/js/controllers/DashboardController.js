@@ -1,12 +1,9 @@
-conAngular.controller('DashboardController', function($state, $rootScope, $scope, $http, $timeout, $interval) {
+conAngular.controller('DashboardController', function($state, $rootScope, $scope, $http, $timeout, $interval, RegistrationService, ActivateService, CardService, RFIDService) {
 
   // toast
   $timeout(function() {
     Materialize.toast('Welcome to KCSoft!', 1000);
   }, 1000);
-  
-  $scope.card = {};
-  $scope.card.points = 0;
   
   $scope.main_actions = [
     { name: 'check_points', label_default: 'Check Card', label_active: 'Touch Card', label_processing: 'Searching' },
@@ -38,102 +35,38 @@ conAngular.controller('DashboardController', function($state, $rootScope, $scope
     }
   }
   
-  $scope.check_points.card = $scope.card;
-  $scope.checkPoints = function(){
-    $scope.check_points.active = true
-    $scope.check_points.label = $scope.check_points.label_active;
-    get_uid($scope.check_points, $scope.check_points.label_default, function(){
-      $scope.check_points.active = true;
-      $scope.check_points.label = $scope.check_points.label_processing;
-      $scope.$apply();
-      $http.get('http://localhost:7777/rfid_server/public/points/' + $scope.check_points.card.id).
-        success(function(data, status, headers, config){
-          console.log(data);
-          $scope.check_points.active = false;
-          $scope.check_points.label = $scope.check_points.label_default;
-        }).
-        error(function(data, status, headers, config){
-          console.log('error checking points');
-        })
-    });
-  };
-  
-  $scope.activate_card.card = $scope.card;
-  $scope.activate_card.status = '';
-  $scope.activate_card.alert = {
-      show: false,
-      status: '',
-      message: ''
-  };
   $scope.activateCard = function(person){
     console.log($state); 
+    ActivateService.select_person(person);
     $state.go('/activate');
     return false;
-    $scope.activate_card.active = true
-    person.card = $scope.activate_card.label = $scope.activate_card.label_active;
-    get_uid($scope.activate_card, $scope.activate_card.label_default, function(){
-      $scope.activate_card.active = true;
-      person.card = $scope.activate_card.label = $scope.activate_card.label_processing;
-      $scope.$apply();
-      $http.post('http://localhost:7777/rfid_server/public/activate', {'id':$scope.activate_card.card.id, 'register_id':person.id}).
-        success(function(data, status, headers, config){
-          console.log(data);
-          $scope.activate_card.status = data.message;
-          $scope.activate_card.active = false;
-          person.card = $scope.activate_card.label = $scope.activate_card.label_default;
-        }).
-        error(function(data, status, headers, config){
-          console.log('error checking points');
-        })
-      });
   };
-  // wooot
   
-  $scope.add_point = {};
-  $scope.add_point.label = 'Add Points';
-  $scope.add_point.active = false;
-  $scope.add_point.card = $scope.card;
-  $scope.addPoints = function(){
-    console.log('add points');
-    $scope.add_point.active = true;
-    $scope.add_point.label = 'Touch card';
-    get_uid($scope.add_point, 'Add Points', function(){
-      $scope.add_point.active = true;
-      $scope.add_point.label = 'Searching';
-      $scope.$apply();
-      $http.post('http://localhost:7777/rfid_server/public/add_point', {'id': $scope.activate_card.card.id, 'points': $scope.add_point.points}).
-        success(function(data, status, headers, config){
-          console.log(data);
-          $scope.add_point.status = data.message;
-          $scope.add_point.active = false;
-          $scope.add_point.label = 'Add Points';
-        }).
-        error(function(data, status, headers, config){
-          console.log('error adding points');
-        })
-      });
-  }
+  $scope.card = CardService;
+  $scope.card.create('add_point');
+  $scope.card.setLabel('Add Points', 'add_point');
+  $scope.card.create('remove_point');
+  $scope.card.setLabel('Remove Points', 'remove_point');
   
-  var get_uid = function(obj, inactive_label, callback){
-    var execPath = path.dirname( process.execPath );   
-    child_process.exec(process.cwd() + '/reader/dist/rfid.exe', function (err, stdout, stderr){
-        if (err) {
-            console.log("child processes failed with error code: " +
-                err.code);
-        }
-        else
-        {
-          stdout = stdout.trim();
-          obj.card.id = stdout;
-          obj.active = false;
-          obj.label = inactive_label;
-          $scope.$apply();
-          callback();
-        }
+  $scope.add_point = {}
+  $scope.remove_point = {}
+  
+  $scope.addPoint = function(){
+    $scope.card.active('add_point');
+    RFIDService.get_uid($scope.card.add_point, function(){
+      $scope.card.processing('add_point');
+      CardService.addPoint($scope.card.add_point.id, $scope.add_point, 'add_point');
     });
   }
   
-
+  $scope.removePoint = function(){
+    $scope.card.active('remove_point');
+    RFIDService.get_uid($scope.card.remove_point, function(){
+      $scope.card.processing('remove_point');
+      CardService.removePoint($scope.card.remove_point.id, $scope.remove_point, 'remove_point');
+    });
+  }
+  
   $scope.stats = {}
   $scope.column_names = [
       { 'name': 'Name', 'column': 'name', display: true },
@@ -146,30 +79,25 @@ conAngular.controller('DashboardController', function($state, $rootScope, $scope
       { 'name': 'Date', 'column':'created_at', edit: false, display: false },
       { 'name': 'Country', 'column':'country', display: true },
       { 'name': 'Type', 'column':'type', display: true },
-      { 'name': 'Card', 'column':'card', display: true }
-    
+      { 'name': 'Card', 'column':'card', display: true }  
   ];
-  $scope.tablesData = [];
+  // total displayable columns
+  $scope.displayable_columns = 0;
+  for(var i in $scope.column_names){
+    if($scope.column_names[i].display == true)
+    {
+      $scope.displayable_columns += 1;
+    }
+  }
   
-   $http.get('http://localhost:7777/rfid_server/public/registrations').
-      success(function(data, status, headers, config) {
-        $scope.tablesData = data;
-      }).
-      error(function(data, status, headers, config) {
-        console.log('error loading registration data');
-      });
-  
+  RegistrationService.get($scope, 'tablesData');
 
   $scope.select_person = function(person){
     $scope.is_person_selected = true;
     $scope.selected_person = person;
-    console.log('selected user');
-    console.log(person);
-    console.log($scope.selected_person);
   }
   
-  $scope.closeEditAdd = function()
-  {
+  $scope.closeEditAdd = function(){
       $scope.is_person_selected = false;
       $scope.create_user = false
       $scope.selected_person = {}
@@ -183,26 +111,6 @@ conAngular.controller('DashboardController', function($state, $rootScope, $scope
       status: '',
       message: ''
   };
-    
-  $scope.sendReceipt = function(){
-      Materialize.toast('Sending email, please wait..', 2000);
-      $http.get('http://localhost:7777/rfid_server/public/registrations/receipt/' + $scope.selected_person.id).
-          success(function(data, status, headers, config) {
-            console.log('sent?');
-            console.log(data);
-            $scope.alert.show = true;
-            $scope.alert.status = data.status;
-            $scope.alert.message = data.message;
-            $scope.is_person_selected = false;
-            $scope.selected_person = {}
-          }).
-          error(function(data, status, headers, config) {
-            console.log('error sending receipt');
-            $scope.alert.show = true;
-            $scope.alert.status = data.status;
-            $scope.alert.message = data.message;
-          });
-  }
     
   $scope.deleteModal = function(){
       $http.post('http://localhost:7777/rfid_server/public/registrations/delete', $scope.selected_person).
@@ -255,39 +163,6 @@ conAngular.controller('DashboardController', function($state, $rootScope, $scope
             $scope.alert.status = data.status;
             $scope.alert.message = data.message;
           });
-  }
-
-  // table 4 testing
-  
-  $scope.table4opts = {
-    "iDisplayLength": 10,
-    "bLengthChange": false,
-    "filter": true,
-    "dom": 'Tlfrtip',
-    "tableTools": {
-      "sSwfPath": "../assets/dataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
-    },
-    "language": {
-        "emptyTable": "Loading Data"
-    }
-  }
-  
-  /*
-  $scope.table4opts = {
-    "ajax": "http://localhost:7777/rfid_server/public/registrations/aaData",
-    "scrollY": "200px",
-    "dom": "frtiS",
-    "deferRender": true
-  }
-  */
-  
-  // table 2
-  $scope.table2opts = {
-    "iDisplayLength": 5,
-    "aLengthMenu": [
-      [5, 10, 25, 50, -1],
-      [5, 10, 25, 50, "all"]
-    ]
   }
   
   

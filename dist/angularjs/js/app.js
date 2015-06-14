@@ -254,18 +254,18 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
       }
     })
   
-    .state('/activate', {
-      url: "/activate_event.html",
-      templateUrl: "tpl/activate_event.html",
-      controller: "ActivateController",
+    .state('/event', {
+      url: "/event.html",
+      templateUrl: "tpl/event.html",
+      controller: "EventController",
       data: {
-        pageTitle: 'Activate',
+        pageTitle: 'Event',
         crumbs: [{
             title: '<i class="fa fa-home"></i> Home',
             href: '#'
           }, {
-            title: 'Activate',
-            href: '#/activate_event.html'
+            title: 'Event',
+            href: '#/event.html'
           }]
       },
       resolve: {
@@ -283,33 +283,152 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
         }]
       }
     })
-
-    // Dashboard v1
-    .state('/dashboard-v1', {
-      url: "/dashboard-v1.html",
-      templateUrl: "tpl/dashboard-v1.html",
-      controller: "DashboardV1Controller",
+  
+    .state('/access', {
+      url: "/access.html",
+      templateUrl: "tpl/access.html",
+      controller: "AccessController",
       data: {
-        pageTitle: 'Dashboard v1',
+        pageTitle: 'Access',
         crumbs: [{
             title: '<i class="fa fa-home"></i> Home',
             href: '#'
           }, {
-            title: 'Dashboard v1',
-            href: '#/dashboard-v1.html'
+            title: 'Access',
+            href: '#/access.html'
           }]
       },
       resolve: {
         deps: ['$ocLazyLoad', function($ocLazyLoad) {
           return $ocLazyLoad.load([{
             name: 'conAngular',
-            insertBefore: '#ngInsertBefore',
+            insertBefore: '#ngInsertBefore', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
             files: conAssets('simpleWeather,sortable')
           }, {
             name: 'conAngular',
-            serie: true,
+            serie: true, // used for synchronous load chart scripts
             insertBefore: '#ngInsertBefore',
-            files: conAssets('flot,nvd3')
+            files: conAssets('dataTables,sparkline,flot,rickshaw,jvectormap')
+          }]);
+        }]
+      }
+    })
+  
+    .state('/card', {
+      url: "/card.html",
+      templateUrl: "tpl/card.html",
+      controller: "CardController",
+      data: {
+        pageTitle: 'Card List',
+        crumbs: [{
+            title: '<i class="fa fa-home"></i> Home',
+            href: '#'
+          }, {
+            title: 'Cards',
+            href: '#/card.html'
+          }]
+      },
+      resolve: {
+        deps: ['$ocLazyLoad', function($ocLazyLoad) {
+          return $ocLazyLoad.load([{
+            name: 'conAngular',
+            insertBefore: '#ngInsertBefore', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+            files: conAssets('simpleWeather,sortable')
+          }, {
+            name: 'conAngular',
+            serie: true, // used for synchronous load chart scripts
+            insertBefore: '#ngInsertBefore',
+            files: conAssets('dataTables,sparkline,flot,rickshaw,jvectormap')
+          }]);
+        }]
+      }
+    })
+  
+    .state('/check', {
+      url: "/check.html",
+      templateUrl: "tpl/check.html",
+      controller: "CheckController",
+      data: {
+        pageTitle: 'Check Card',
+        crumbs: [{
+            title: '<i class="fa fa-home"></i> Home',
+            href: '#'
+          }, {
+            title: 'Check Card',
+            href: '#/check.html'
+          }]
+      },
+      resolve: {
+        deps: ['$ocLazyLoad', function($ocLazyLoad) {
+          return $ocLazyLoad.load([{
+            name: 'conAngular',
+            insertBefore: '#ngInsertBefore', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+            files: conAssets('simpleWeather,sortable')
+          }, {
+            name: 'conAngular',
+            serie: true, // used for synchronous load chart scripts
+            insertBefore: '#ngInsertBefore',
+            files: conAssets('dataTables,sparkline,flot,rickshaw,jvectormap')
+          }]);
+        }]
+      }
+    })
+  
+    .state('/client', {
+      url: "/client.html",
+      templateUrl: "tpl/client.html",
+      controller: "ClientController",
+      data: {
+        pageTitle: 'Clients',
+        crumbs: [{
+            title: '<i class="fa fa-home"></i> Home',
+            href: '#'
+          }, {
+            title: 'Clients',
+            href: '#/client.html'
+          }]
+      },
+      resolve: {
+        deps: ['$ocLazyLoad', function($ocLazyLoad) {
+          return $ocLazyLoad.load([{
+            name: 'conAngular',
+            insertBefore: '#ngInsertBefore', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+            files: conAssets('simpleWeather,sortable')
+          }, {
+            name: 'conAngular',
+            serie: true, // used for synchronous load chart scripts
+            insertBefore: '#ngInsertBefore',
+            files: conAssets('dataTables,sparkline,flot,rickshaw,jvectormap')
+          }]);
+        }]
+      }
+    })
+  
+    .state('/activate', {
+      url: "/activate.html",
+      templateUrl: "tpl/activate.html",
+      controller: "ActivateController",
+      data: {
+        pageTitle: 'Activate',
+        crumbs: [{
+            title: '<i class="fa fa-home"></i> Home',
+            href: '#/dashboard.html'
+          }, {
+            title: 'Activate',
+            href: '#/activate.html'
+          }]
+      },
+      resolve: {
+        deps: ['$ocLazyLoad', function($ocLazyLoad) {
+          return $ocLazyLoad.load([{
+            name: 'conAngular',
+            insertBefore: '#ngInsertBefore', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+            files: conAssets('simpleWeather,sortable')
+          }, {
+            name: 'conAngular',
+            serie: true, // used for synchronous load chart scripts
+            insertBefore: '#ngInsertBefore',
+            files: conAssets('dataTables,sparkline,flot,rickshaw,jvectormap')
           }]);
         }]
       }
@@ -332,468 +451,11 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
       }
     })
 
-    // Widgets
-    .state('/widgets', {
-      url: "/widgets.html",
-      templateUrl: "tpl/widgets.html",
-      controller: "PageController",
-      data: {
-        pageTitle: 'Widgets',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Widgets',
-            href: '#/widgets.html'
-          }]
-      },
-      resolve: {
-        deps: ['$ocLazyLoad', function($ocLazyLoad) {
-          return $ocLazyLoad.load([{
-            name: 'conAngular',
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('sparkline,simpleWeather')
-          }]);
-        }]
-      }
-    })
-
-    // Forms Base
-    .state('/forms-base', {
-      url: "/forms-base.html",
-      templateUrl: "tpl/forms-base.html",
-      controller: "PageController",
-      data: {
-        pageTitle: 'Base Forms',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Forms',
-            href: '#'
-          }, {
-            title: 'Base Forms',
-            href: '#/forms-base.html'
-          }]
-      }
-    })
-
-    // Forms Advanced
-    .state('/forms-advanced', {
-      url: "/forms-advanced.html",
-      templateUrl: "tpl/forms-advanced.html",
-      controller: "PageController",
-      data: {
-        pageTitle: 'Advanced Forms',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Forms',
-            href: '#'
-          }, {
-            title: 'Advanced Forms',
-            href: '#/forms-advanced.html'
-          }]
-      },
-      resolve: {
-        deps: ['$ocLazyLoad', function($ocLazyLoad) {
-          return $ocLazyLoad.load([{
-            name: 'conAngular',
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('select2,dropzone,tagsinput,clockpicker,spectrum,inputmask,parsley')
-          }, {
-            name: 'conAngular',
-            serie: true,
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('pikaday')
-          }]);
-        }]
-      }
-    })
-
-    // Forms Validation
-    .state('/forms-validation', {
-      url: "/forms-validation.html",
-      templateUrl: "tpl/forms-validation.html",
-      controller: "PageController",
-      data: {
-        pageTitle: 'Forms Validation',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Forms',
-            href: '#'
-          }, {
-            title: 'Validation',
-            href: '#/forms-validation.html'
-          }]
-      },
-      resolve: {
-        deps: ['$ocLazyLoad', function($ocLazyLoad) {
-          return $ocLazyLoad.load([{
-            name: 'conAngular',
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('parsley')
-          }]);
-        }]
-      }
-    })
-
-    // Forms Editors
-    .state('/forms-editors', {
-      url: "/forms-editors.html",
-      templateUrl: "tpl/forms-editors.html",
-      controller: "PageController",
-      data: {
-        pageTitle: 'Editors',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Forms',
-            href: '#'
-          }, {
-            title: 'Editors',
-            href: '#/forms-editors.html'
-          }]
-      },
-      resolve: {
-        deps: ['$ocLazyLoad', function($ocLazyLoad) {
-          return $ocLazyLoad.load([{
-            name: 'conAngular',
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('markitup,ckeditor')
-          }]);
-        }]
-      }
-    })
-
-    // Mail Inbox
-    .state('/mail-inbox', {
-      url: "/mail-inbox.html",
-      templateUrl: "tpl/mail-inbox.html",
-      controller: "PageController",
-      data: {
-        pageTitle: 'Mail Inbox',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Mail',
-            href: '#'
-          }, {
-            title: 'Inbox',
-            href: '#/mail-inbox.html'
-          }]
-      }
-    })
-
-    // Mail View
-    .state('/mail-view', {
-      url: "/mail-view.html",
-      templateUrl: "tpl/mail-view.html",
-      controller: "PageController",
-      data: {
-        pageTitle: 'Mail View',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Mail',
-            href: '#'
-          }, {
-            title: 'View',
-            href: '#/mail-view.html'
-          }]
-      }
-    })
-
-    // Mail Compose
-    .state('/mail-compose', {
-      url: "/mail-compose.html",
-      templateUrl: "tpl/mail-compose.html",
-      controller: "PageController",
-      data: {
-        pageTitle: 'Mail Compose',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Mail',
-            href: '#'
-          }, {
-            title: 'Compose',
-            href: '#/mail-compose.html'
-          }]
-      },
-      resolve: {
-        deps: ['$ocLazyLoad', function($ocLazyLoad) {
-          return $ocLazyLoad.load([{
-            name: 'conAngular',
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('ckeditor')
-          }]);
-        }]
-      }
-    })
-
-    // Charts Flot
-    .state('/charts-flot', {
-      url: "/charts-flot.html",
-      templateUrl: "tpl/charts-flot.html",
-      controller: "ChartFlotController",
-      data: {
-        pageTitle: 'Flot Charts',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Charts',
-            href: '#'
-          }, {
-            title: 'Flot',
-            href: '#/charts-flot.html'
-          }]
-      },
-      resolve: {
-        deps: ['$ocLazyLoad', function($ocLazyLoad) {
-          return $ocLazyLoad.load([{
-            name: 'conAngular',
-            serie: true,
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('flot')
-          }]);
-        }]
-      }
-    })
-
-    // Charts NVD3
-    .state('/charts-nvd3', {
-      url: "/charts-nvd3.html",
-      templateUrl: "tpl/charts-nvd3.html",
-      controller: "ChartNVD3Controller",
-      data: {
-        pageTitle: 'NVD3 Charts',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Charts',
-            href: '#'
-          }, {
-            title: 'NVD3',
-            href: '#/charts-nvd3.html'
-          }]
-      },
-      resolve: {
-        deps: ['$ocLazyLoad', function($ocLazyLoad) {
-          return $ocLazyLoad.load([{
-            name: 'conAngular',
-            serie: true,
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('nvd3')
-          }]);
-        }]
-      }
-    })
-
-    // Charts Rickshaw
-    .state('/charts-rickshaw', {
-      url: "/charts-rickshaw.html",
-      templateUrl: "tpl/charts-rickshaw.html",
-      controller: "ChartRickshawController",
-      data: {
-        pageTitle: 'Rickshaw Charts',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Charts',
-            href: '#'
-          }, {
-            title: 'Rickshaw',
-            href: '#/charts-rickshaw.html'
-          }]
-      },
-      resolve: {
-        deps: ['$ocLazyLoad', function($ocLazyLoad) {
-          return $ocLazyLoad.load([{
-            name: 'conAngular',
-            serie: true,
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('rickshaw')
-          }]);
-        }]
-      }
-    })
-
-    // Charts Sparkline
-    .state('/charts-sparkline', {
-      url: "/charts-sparkline.html",
-      templateUrl: "tpl/charts-sparkline.html",
-      controller: "ChartSparkController",
-      data: {
-        pageTitle: 'Sparkline Charts',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Charts',
-            href: '#'
-          }, {
-            title: 'Sparkline',
-            href: '#/charts-sparkline.html'
-          }]
-      },
-      resolve: {
-        deps: ['$ocLazyLoad', function($ocLazyLoad) {
-          return $ocLazyLoad.load([{
-            name: 'conAngular',
-            serie: true,
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('sparkline')
-          }]);
-        }]
-      }
-    })
-
-    // Google Maps
-    .state('/maps-google', {
-      url: "/maps-google.html",
-      templateUrl: "tpl/maps-google.html",
-      controller: "PageController",
-      data: {
-        pageTitle: 'Google Maps',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Maps',
-            href: '#'
-          }, {
-            title: 'Google',
-            href: '#/maps-google.html'
-          }]
-      },
-      resolve: {
-        deps: ['$ocLazyLoad', function($ocLazyLoad) {
-          return $ocLazyLoad.load([{
-            name: 'conAngular',
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('gmaps')
-          }]);
-        }]
-      }
-    })
-
-    // Vector Maps
-    .state('/maps-vector', {
-      url: "/maps-vector.html",
-      templateUrl: "tpl/maps-vector.html",
-      controller: "MapsVectorController",
-      data: {
-        pageTitle: 'Vector Maps',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Maps',
-            href: '#'
-          }, {
-            title: 'Vector',
-            href: '#/maps-vector.html'
-          }]
-      },
-      resolve: {
-        deps: ['$ocLazyLoad', function($ocLazyLoad) {
-          return $ocLazyLoad.load([{
-            name: 'conAngular',
-            serie: true,
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('jvectormap')
-          }]);
-        }]
-      }
-    })
-
-    // Data Tables
-    .state('/data-tables', {
-      url: "/data-tables.html",
-      templateUrl: "tpl/data-tables.html",
-      controller: "DatatablesController",
-      data: {
-        pageTitle: 'Data Tables',
-        crumbs: [{
-            title: '<i class="fa fa-home"></i> Home',
-            href: '#'
-          }, {
-            title: 'Dashboard',
-            href: '#/dashboard.html'
-          }, {
-            title: 'Data Tables',
-            href: '#/data-tables.html'
-          }]
-      },
-      resolve: {
-        deps: ['$ocLazyLoad', function($ocLazyLoad) {
-          return $ocLazyLoad.load([{
-            name: 'conAngular',
-            serie: true,
-            insertBefore: '#ngInsertBefore',
-            files: conAssets('dataTables')
-          }]);
-        }]
-      }
-    })
-
 
 }]);
 
 /* Init global settings and run the app */
 conAngular.run(["$rootScope", "settings", "$state", function($rootScope, settings, $state) {
   $rootScope.$state = $state; // state to be accessed from view
+  $rootScope.url = 'http://localhost:7777/rfid_server/public';
 }]);

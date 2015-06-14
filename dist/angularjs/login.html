@@ -1,13 +1,3 @@
-<!--
-  Name: Con - Admin Dashboard with Material Design
-  Version: 2.0.0
-  Author: nK
-  Website: http://nkdev.info
-  Support: http://nk.ticksy.com
-  Purchase: http://themeforest.net/item/con-material-admin-dashboard-template/10621512?ref=nKdev
-  License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
-  Copyright 2015.
--->
 <!DOCTYPE html>
 <!--[if lt IE 7]>  <html class="lt-ie7"> <![endif]-->
 <!--[if IE 7]>     <html class="lt-ie8"> <![endif]-->
@@ -59,9 +49,51 @@
     <!-- Background Bubbles -->
     <canvas id="bubble-canvas"></canvas>
     <!-- /Background Bubbles -->
+    
+    <div class="login-settings">
+      <!-- Settings Form -->
+      <form action="dashboard.html" data-parsley-validate>
+        <div class="row links">
+          <div class="col s6 logo">
+            Settings
+          </div>
+          <div class="col s6 right-align"><strong>Client Setup</strong>
+          </div>
+        </div>
+
+        <div class="card-panel">
+
+          <div class="row">
+            <div class="col"></div>
+          </div>
+          
+          <div class="input-field">
+            <i class="fa fa-user prefix"></i>
+            <input id="client-name" type="text" class="validate" required>
+            <label for="client-name">Client Name</label>
+          </div>
+
+          <div class="input-field">
+            <i class="fa fa-user prefix"></i>
+            <input id="server-url" type="text" class="validate" required>
+            <label for="server-url">Server URL</label>
+          </div>
+          
+          <div class="input-field">
+            <i class="fa fa-user prefix"></i>
+            <input id="client-key" type="text" class="validate" required>
+            <label for="client-key">Client Key</label>
+          </div>
+
+          <button type="button" id="settings-btn" class="waves-effect waves-light btn-large z-depth-0 z-depth-1-hover">Save Settings</button>
+        </div>
+
+      </form>
+      <!-- /Sign In Form -->  
+    </div>
 
     <!-- Sign In Form -->
-    <form action="dashboard.html">
+    <form action="dashboard.html" class="login-form">
       <div class="row links">
         <div class="col s6 logo">
           KCSoft
@@ -71,21 +103,7 @@
       </div>
 
       <div class="card-panel">
-
-        <!-- Social Sign Up -->
-        <div class="row socials">
-          <div class="col s4">
-            <a class="btn blue darken-2 z-depth-0 z-depth-1-hover" href="#"><i class="fa fa-2x fa-facebook"></i></a>
-          </div>
-          <div class="col s4">
-            <a class="btn blue lighten-2 z-depth-0 z-depth-1-hover" href="#"><i class="fa fa-2x fa-twitter"></i></a>
-          </div>
-          <div class="col s4">
-            <a class="btn red z-depth-0 z-depth-1-hover" href="#"><i class="fa fa-2x fa-google-plus"></i></a>
-          </div>
-        </div>
-        <!-- /Social Sign Up -->
-
+        
         <div class="row">
           <div class="col"></div>
         </div>
@@ -93,32 +111,20 @@
         <!-- Username -->
         <div class="input-field">
           <i class="fa fa-user prefix"></i>
-          <input id="username-input" type="text" class="validate">
-          <label for="username-input">Username</label>
+          <input id="username" type="text" class="validate">
+          <label for="username">Username</label>
         </div>
         <!-- /Username -->
 
         <!-- Password -->
         <div class="input-field">
           <i class="fa fa-unlock-alt prefix"></i>
-          <input id="password-input" type="password" class="validate">
-          <label for="password-input">Password</label>
+          <input id="password" type="password" class="validate">
+          <label for="password">Password</label>
         </div>
         <!-- /Password -->
 
-        <div class="switch">
-          <label>
-            <input type="checkbox" checked />
-            <span class="lever"></span>
-            Remember
-          </label>
-        </div>
-
         <button type="button" id="login-btn" class="waves-effect waves-light btn-large z-depth-0 z-depth-1-hover">Sign In</button>
-      </div>
-
-      <div class="links right-align">
-        <a href="page-forgot-password.html">Forgot Password?</a>
       </div>
 
     </form>
@@ -144,13 +150,86 @@
 
   <!-- Sortable -->
   <script type="text/javascript" src="../assets/sortable/Sortable.min.js"></script>
+  
+  <script type="text/javascript" src="../assets/parsley/parsley.min.js"></script>
 
   <!-- Main -->
   <script type="text/javascript" src="../assets/_con/js/_con.min.js"></script>
   <script>
+    var fs = require('fs');
+    var YAML = require('yamljs');
+    
     $('#login-btn').on('click', function(){
-      window.location = 'index.html';
+      console.log(settings);
+      $.post(settings.server.url + '/login', { 'email': $('#username').val(), 'password': $('#password').val(), 'name': settings.client.name, 'key': settings.client.key }, function(data){
+        sessionStorage.username = $('#username').val();
+        sessionStorage.password = $('#password').val();
+        sessionStorage.name = settings.client.name;
+        sessionStorage.key = settings.client.key;
+        window.location = 'index.html';
+      }).fail(function(){ console.log('login failed'); });
     });
+    
+    var loadSettings = function(){
+      var data 
+      try{
+        data = fs.readFileSync(process.cwd() + '/settings', { encoding: 'utf8'});
+      } catch (e) {
+        console.log(e);
+      }
+      var settings = YAML.parse(data);
+      if(settings.server.url == '' || settings.server.url == undefined){ settings = false; }
+      if(settings.client.name == '' || settings.client.name == undefined){ settings =  false; }
+      return settings;
+    }
+    
+    var settings = {};
+    
+    // Check if settings file exists.
+    fs.exists(process.cwd() + '/settings', function (exists) {
+      console.log(exists ? 'exists!':'not there');
+      if(!exists)
+      {
+        $('.login-form').hide();
+        $('.login-settings').show();
+      }
+      else
+      {
+        settings = loadSettings();
+        console.log(settings);
+        if(settings == false)
+        {
+          $('.login-form').hide();
+          $('.login-settings').show();
+        }
+        else
+        {
+          $('.login-form').show();
+          $('.login-settings').hide();
+        }
+      }
+    });
+    
+    $('#settings-btn').on('click', function(){
+      
+      var tmp_settings = {};
+      tmp_settings.server = {}
+      tmp_settings.server.url = $('#server-url').val();
+      tmp_settings.client = {}
+      tmp_settings.client.name = $('#client-name').val();
+      tmp_settings.client.key = $('#client-key').val();
+      YAMLString = YAML.stringify(tmp_settings, 4);
+      fs.writeFile(process.cwd() + '/settings', YAMLString, function(err){
+        if(err){
+          return console.log(err);
+        }
+        console.log('File saved');
+        $('.login-form').show();
+        $('.login-settings').hide();
+        settings = loadSettings();
+      })
+    });
+    
   </script>
 </body>
 

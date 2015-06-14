@@ -1,0 +1,64 @@
+<div class="page-title" data-ng-include="'tpl/parts/breadcrumbs.html'"></div>
+
+<div class="row">
+  <div class="col s12 m12 l12">
+    <a class="btn btn-extra full-btn {{ card.css }}" ng-click="checkCard()">
+      <i class="fa fa-credit-card"></i>
+      {{ card.label }}
+    </a>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col s12 m12 l12">
+      <div class="card-panel">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <tbody>
+              <tr class="unread">
+                <td class="mail-contact">
+                  Card ID
+                </td>
+                <td class="mail-subject">
+                  <a href="#">{{card.data.uid}}</a>
+                </td>
+              </tr>
+              <tr class="unread">
+                <td class="mail-contact">
+                  Points
+                </td>
+                <td class="mail-subject">
+                  <a href="#">{{ (card.points) ? card.points:0}}</a>
+                </td>
+              </tr>
+              <tr class="unread">
+                <td class="mail-contact">
+                  Participant
+                </td>
+                <td class="mail-subject">
+                  <a href="#">{{card.data.person.name}}</a>
+                  <span ng-if="card.data.person.name == undefined && (card.status == 'processing')">Loading</span>
+                </td>
+              </tr>
+              <tr class="unread">
+                <td class="mail-contact">
+                  Event
+                </td>
+                <td class="mail-subject">
+                  <a href="#" ng-repeat="event in card.data.events">{{event.name}}</a>
+                </td>
+              </tr>
+              <tr class="unread">
+                <td class="mail-contact">
+                  Access
+                </td>
+                <td class="mail-subject">
+                  <a href="#" ng-repeat="access in card.data.access">{{access.name}}</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+</div>

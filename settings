@@ -1,0 +1,5 @@
+server:
+    url: 'http://localhost:7777/rfid_server/public'
+client:
+    name: 'local kiosk'
+    key: ""
