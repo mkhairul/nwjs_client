@@ -45,6 +45,23 @@
   height: 400px;
   margin: auto;
   position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
+  left: 0; right: 0;
   z-index: 99;
 }
+
+.no-margin{ margin: 0; }
+.no-side-border{ border-left: none; border-right: none; }
+
+.title .help{
+  float: right;
+  width: 20px;
+  text-align: center;
+  color: inherit;
+  -webkit-transition: -webkit-transform 300ms ease-in-out;
+  transition: transform 300ms ease-in-out;
+}
+
+.actions div.btn{ display: block; margin-bottom: 10px;  }
+.actions a strong{ vertical-align: middle; }
+.actions a i.fa{ margin-right: 3px; }
+/* test 123 */

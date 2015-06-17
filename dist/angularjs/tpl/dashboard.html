@@ -27,6 +27,83 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="col s12 l4">
+    <div class="card actions">
+      <div class="title blue white-text">
+        <h5>Cards</h5>
+        <a class="close" href="#">
+          <i class="mdi-content-clear"></i>
+        </a>
+        <a class="minimize" href="#">
+          <i class="mdi-navigation-expand-less"></i>
+        </a>
+      </div>
+      <div class="content mail-card">
+
+        <div class="btn waves-effect waves-blue">Check</div>
+        <div class="btn waves-effect waves-blue">Points</div>
+        <div class="btn waves-effect waves-blue">Disable</div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="col s12 l4">
+    <div class="card actions">
+      <div class="title">
+        <h5>Participants</h5>
+        <a class="close" href="#">
+          <i class="mdi-content-clear"></i>
+        </a>
+        <a class="minimize" href="#">
+          <i class="mdi-navigation-expand-less"></i>
+        </a>
+      </div>
+      <div class="content mail-card">
+
+        <div class="btn waves-effect waves-blue">Register</div>
+        <div class="btn waves-effect waves-blue">Activate Card</div>
+        <div class="btn waves-effect waves-blue">Event</div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="col l4 s12">
+    <div class="card actions">
+      <div class="title">
+        <h5>Card</h5>
+        <a class="close" href="#">
+          <i class="mdi-content-clear"></i>
+        </a>
+        <a class="minimize" href="#">
+          <i class="mdi-navigation-expand-less"></i>
+        </a>
+      </div>
+      <div class="content mail-card">
+
+        <div class="row waves-effect waves-blue">
+          <a href="#" class="">
+            <i class="fa fa-search"></i>
+            <strong>Check</strong>
+          </a>
+        </div>
+        <!-- lalalalla -->
+        <hr>
+
+        <div class="row">
+          <a href="#" class=" waves-effect waves-blue">
+            <i class="fa fa-dollar"></i>
+            <strong>Points</strong>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="row dashboard-actions">
   <div class="col s6">
     <div class="add-points card-panel stats-card amber lighten-2 amber-text text-lighten-5">
@@ -229,7 +306,7 @@
             </div>
         </td>
       </tr>
-      <tr ng-repeat="person in tablesData | filter:searchTablesData">
+      <tr ng-repeat="person in tablesData1 | filter:searchTablesData1">
         <td ng-click="select_person(person)"><a href="#">{{ person.name }}</a></td>
         <td>{{ person.phone }}</td>
         <td>{{ person.dci }}</td>

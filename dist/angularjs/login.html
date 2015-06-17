@@ -69,23 +69,38 @@
           
           <div class="input-field">
             <i class="fa fa-user prefix"></i>
-            <input id="client-name" type="text" class="validate" required>
+            <input id="client-name" type="text" class="validate" value="" required>
             <label for="client-name">Client Name</label>
           </div>
 
           <div class="input-field">
-            <i class="fa fa-user prefix"></i>
-            <input id="server-url" type="text" class="validate" required>
+            <i class="fa fa-link prefix"></i>
+            <input id="server-url" type="text" class="validate" value="" required>
             <label for="server-url">Server URL</label>
           </div>
           
           <div class="input-field">
-            <i class="fa fa-user prefix"></i>
-            <input id="client-key" type="text" class="validate" required>
+            <i class="fa fa-key prefix"></i>
+            <input id="client-key" type="text" class="validate" value="" required>
             <label for="client-key">Client Key</label>
           </div>
 
           <button type="button" id="settings-btn" class="waves-effect waves-light btn-large z-depth-0 z-depth-1-hover">Save Settings</button>
+        </div>
+        
+        <div class="row no-margin">
+          <div class="col s6 links left-align">
+            <a href="#" class="show-help">
+              <i class="fa fa-question-circle"></i>
+              Help
+            </a>
+          </div>
+          <div class="col s6 links right-align">
+            <a href="#" id="show-login">
+              <i class="fa fa-sign-in"></i>
+              Login
+            </a>
+          </div>
         </div>
 
       </form>
@@ -93,7 +108,7 @@
     </div>
 
     <!-- Sign In Form -->
-    <form action="dashboard.html" class="login-form">
+    <form action="dashboard.html" class="login-form" data-parsley-validate>
       <div class="row links">
         <div class="col s6 logo">
           KCSoft
@@ -104,14 +119,12 @@
 
       <div class="card-panel">
         
-        <div class="row">
-          <div class="col"></div>
-        </div>
+        <div class="alert" style="display: none;"></div>
 
         <!-- Username -->
         <div class="input-field">
           <i class="fa fa-user prefix"></i>
-          <input id="username" type="text" class="validate">
+          <input id="username" type="text" class="validate" required>
           <label for="username">Username</label>
         </div>
         <!-- /Username -->
@@ -119,12 +132,26 @@
         <!-- Password -->
         <div class="input-field">
           <i class="fa fa-unlock-alt prefix"></i>
-          <input id="password" type="password" class="validate">
+          <input id="password" type="password" class="validate" required>
           <label for="password">Password</label>
         </div>
         <!-- /Password -->
 
         <button type="button" id="login-btn" class="waves-effect waves-light btn-large z-depth-0 z-depth-1-hover">Sign In</button>
+      </div>
+      <div class="row no-margin">
+        <div class="col s6 links left-align">
+          <a href="#" class="show-help">
+            <i class="fa fa-question-circle"></i>
+            Help
+          </a>
+        </div>
+        <div class="col s6 links right-align">
+          <a href="#" id="show-settings">
+            <i class="fa fa-cogs"></i>
+            Settings
+          </a>
+        </div>
       </div>
 
     </form>
@@ -167,7 +194,10 @@
         sessionStorage.name = settings.client.name;
         sessionStorage.key = settings.client.key;
         window.location = 'index.html';
-      }).fail(function(){ console.log('login failed'); });
+      }).fail(function(){ 
+        $('.login-form .alert').html('Login failed').show();
+        console.log('login failed'); 
+      });
     });
     
     var loadSettings = function(){
@@ -208,6 +238,20 @@
           $('.login-settings').hide();
         }
       }
+    });
+    
+    $('#show-settings').on('click', function(){
+      var settings = loadSettings();
+      $('.login-form').hide();
+      $('.login-form .alert').hide();
+      $('.login-settings').show();
+      $('#client-name').val(settings.client.name).focus().blur();
+      $('#client-key').val(settings.client.key).focus().blur();
+      $('#server-url').val(settings.server.url).focus().blur();
+    });
+    $('#show-login').on('click', function(){
+      $('.login-form').show();
+      $('.login-settings').hide();
     });
     
     $('#settings-btn').on('click', function(){

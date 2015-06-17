@@ -4,6 +4,6 @@
   "main": "dist/angularjs/login.html",
   "window":{
     "kiosk": true,
-    "toolbar": false
+    "toolbar": true
   }
 }
