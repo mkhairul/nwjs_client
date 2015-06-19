@@ -1,7 +1,7 @@
 <div class="page-title" data-ng-include="'tpl/parts/breadcrumbs.html'"></div>
 
 <div class="row">
-  <div class="card-panel" ng-show="new == true">
+  <div class="card-panel" ng-show="new_access == true">
       <h4>Add</h4>
       <form ng-submit="save()">
           <div class="row">
@@ -28,7 +28,7 @@
           <div class="row">
               <div class="col">
                   <button class="btn" type="submit" name="action">Save</button>
-                  <a class="btn" ng-click="new = false">Close</a>
+                  <a class="btn" ng-click="new_access = false">Close</a>
                   <a class="waves-effect waves-dark btn red modal-trigger" href="#deleteModal" ng-click="deleteEvent()">Delete</a>
               </div>
           </div>
@@ -36,8 +36,8 @@
   </div>
 </div>
 
-<div class="row" ng-if="new != true">
-  <h4>Access <a class="btn-floating red waves-effect btn-small" ng-click="new()"><i class="mdi-content-add"></i></a></h4>
+<div class="row" ng-if="new_access != true">
+  <h4>Access <a class="btn-floating red waves-effect btn-small" ng-click="newAccess()"><i class="mdi-content-add"></i></a></h4>
   <table class="table">
     <thead>
       <tr>

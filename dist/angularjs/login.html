@@ -60,12 +60,13 @@
           <div class="col s6 right-align"><strong>Client Setup</strong>
           </div>
         </div>
+        <div class="card-panel loading" style="display:none">
+          <p class="center"><i class="fa fa-spinner fa-pulse"></i> Loading</p>
+        </div>
 
-        <div class="card-panel">
-
-          <div class="row">
-            <div class="col"></div>
-          </div>
+        <div class="card-panel content">
+          
+          <div class="alert" style="display: none;"></div>
           
           <div class="input-field">
             <i class="fa fa-user prefix"></i>
@@ -116,8 +117,12 @@
         <div class="col s6 right-align"><strong>Login</strong>
         </div>
       </div>
+      
+      <div class="card-panel loading" style="display:none">
+        <p class="center"><i class="fa fa-spinner fa-pulse"></i> Loading</p>
+      </div>
 
-      <div class="card-panel">
+      <div class="card-panel content">
         
         <div class="alert" style="display: none;"></div>
 
@@ -187,18 +192,40 @@
     var YAML = require('yamljs');
     
     $('#login-btn').on('click', function(){
+      var self = this;
+      toggleLoading(self)
       console.log(settings);
       $.post(settings.server.url + '/login', { 'email': $('#username').val(), 'password': $('#password').val(), 'name': settings.client.name, 'key': settings.client.key }, function(data){
+        toggleLoading(self)
         sessionStorage.username = $('#username').val();
         sessionStorage.password = $('#password').val();
         sessionStorage.name = settings.client.name;
         sessionStorage.key = settings.client.key;
+        sessionStorage.url = settings.server.url;
         window.location = 'index.html';
       }).fail(function(){ 
+        toggleLoading(self)
         $('.login-form .alert').html('Login failed').show();
         console.log('login failed'); 
       });
     });
+    
+    var toggleLoading = function(obj){
+      console.log('Toggle Loading')
+      console.log(obj);
+      if($(obj).closest('form').children('.loading').css('display') == 'none')
+      {
+        console.log('Display Loading')
+        $(obj).closest('form').children('.loading').show();
+        $(obj).closest('form').children('.content').hide();
+      }
+      else
+      {
+        console.log('Hide Loading')
+        $(obj).closest('form').children('.loading').hide();
+        $(obj).closest('form').children('.content').show();
+      }
+    }
     
     var loadSettings = function(){
       var data 
@@ -255,23 +282,38 @@
     });
     
     $('#settings-btn').on('click', function(){
+      var self = this;
+      toggleLoading(self)
+      $(self).closest('form').children('.alert').hide();
       
-      var tmp_settings = {};
-      tmp_settings.server = {}
-      tmp_settings.server.url = $('#server-url').val();
-      tmp_settings.client = {}
-      tmp_settings.client.name = $('#client-name').val();
-      tmp_settings.client.key = $('#client-key').val();
-      YAMLString = YAML.stringify(tmp_settings, 4);
-      fs.writeFile(process.cwd() + '/settings', YAMLString, function(err){
-        if(err){
-          return console.log(err);
-        }
-        console.log('File saved');
-        $('.login-form').show();
-        $('.login-settings').hide();
-        settings = loadSettings();
-      })
+      // Check if the server url is correct / connectable
+      $.get(settings.server.url + '/connect-test', function(data){
+        toggleLoading(self)
+        console.log('url is connectable');
+        var tmp_settings = {};
+        tmp_settings.server = {}
+        tmp_settings.server.url = $('#server-url').val();
+        tmp_settings.client = {}
+        tmp_settings.client.name = $('#client-name').val();
+        tmp_settings.client.key = $('#client-key').val();
+        YAMLString = YAML.stringify(tmp_settings, 4);
+        fs.writeFile(process.cwd() + '/settings', YAMLString, function(err){
+          if(err){
+            return console.log(err);
+          }
+          console.log('File saved');
+          $('.login-form').show();
+          $('.login-settings').hide();
+          settings = loadSettings();
+        })
+        
+      }, 'json').fail(function(){
+        console.log('error');
+        toggleLoading(self)
+        $('.alert', $(self).closest('form')).show();
+        $('.alert', $(self).closest('form')).html('Invalid URL');
+      });
+
     });
     
   </script>

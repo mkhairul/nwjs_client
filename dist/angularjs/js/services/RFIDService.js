@@ -13,6 +13,7 @@ conAngular.factory('RFIDService', ['$rootScope', '$compile', '$window', '$http',
             stdout = stdout.trim();
             console.log('uid retrieved');
             obj.id = stdout;
+            obj.uid = stdout;
             console.log('UID: ' + obj.id);
             callback();
           }

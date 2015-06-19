@@ -75,8 +75,7 @@ conAngular.factory('CardService', ['$rootScope', '$compile', '$window', '$http',
     }
   }
   
-  obj.active = function(name)
-  {
+  obj.active = function(name){
     if(name != undefined)
     {
       obj[name].label = obj[name].label_active;
@@ -106,9 +105,27 @@ conAngular.factory('CardService', ['$rootScope', '$compile', '$window', '$http',
     }
   }
   
-  obj.disable = function(card){
+  // name or object
+  obj.disable = function(name){
+    var card = (typeof(name) == 'string') ? obj[name]:((typeof(name) == 'object') ? name:obj);
+    console.log(card);
     $http.post($rootScope.url + '/card/disable', card).
       success(function(data, status, headers, config){
+        console.log(typeof(name));
+        if(typeof(name) == 'string')
+        {
+          obj.inactive(name);
+          obj[name].server_status = data.status;
+          obj[name].server_message = data.message;
+          obj[name].active = 0;
+        }
+        else
+        {
+          obj.inactive();
+          obj.server_status = data.status;
+          obj.server_message = data.message;
+          obj.active = 0;
+        }
         card.active = 0;
       }).
       error(function(data, status, headers, config){
@@ -117,9 +134,25 @@ conAngular.factory('CardService', ['$rootScope', '$compile', '$window', '$http',
       });
   }
   
-  obj.enable = function(card){
+  obj.enable = function(name){
+    var card = (typeof(name) == 'string') ? obj[name]:((typeof(name) == 'object') ? name:obj);
     $http.post($rootScope.url + '/card/enable', card).
       success(function(data, status, headers, config){
+        
+        if(typeof(name) == 'string')
+        {
+          obj.inactive(name);
+          obj[name].server_status = data.status;
+          obj[name].server_message = data.message;
+          obj[name].active = 1;
+        }
+        else
+        {
+          obj.inactive();
+          obj.server_status = data.status;
+          obj.server_message = data.message;
+          obj.active = 1;
+        }
         card.active = 1;
       }).
       error(function(data, status, headers, config){
@@ -177,7 +210,7 @@ conAngular.factory('CardService', ['$rootScope', '$compile', '$window', '$http',
   }
   
   obj.addPoint = function(id, someObj, name){
-    $http.post($rootScope.url + '/add_point', {'id':id, 'points':someObj.points}).
+    $http.post($rootScope.url + '/add_point', {'id':id, 'points':someObj.points, 'reason':someObj.reason}).
       success(function(data, status, headers, config){
         console.log(data);
         if(name != undefined)
@@ -205,6 +238,28 @@ conAngular.factory('CardService', ['$rootScope', '$compile', '$window', '$http',
           obj.inactive();
         }
       })
+  }
+  
+  obj.addEvent = function(event, name){
+    var card = (typeof(name) == 'string') ? obj[name]:obj;
+    $http.post($rootScope.url + '/card/add_event', { 'uid':card.uid, 'events_id': event.id }).
+      success(function(data){
+        if(name != undefined)
+        {
+          obj.inactive(name);
+          obj[name].server_status = data.status;
+          obj[name].server_message = data.message;
+        }
+        else
+        {
+          obj.inactive();
+          obj.server_status = data.status;
+          obj.server_message = data.message;
+        }
+      }).
+      error(function(data, status, headers, config){
+        console.log('unable to retrieve total cards');
+      });
   }
   
   obj.removePoint = function(id, obj, name){

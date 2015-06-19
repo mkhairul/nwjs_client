@@ -14,7 +14,7 @@
   <div class="col s12 m6 l6">
     <div class="card-panel stats-card blue blue-text text-lighten-5">
       <i class="fa fa-user"></i>
-      <span class="count">{{ (tablesData.length) ? tablesData.length:0 }}</span>
+      <span class="count">{{ (total_reg) ? total_reg:0 }}</span>
       <div class="name">Participants</div>
     </div>
   </div>
@@ -30,7 +30,7 @@
 <div class="row">
   <div class="col s12 l4">
     <div class="card actions">
-      <div class="title blue white-text">
+      <div class="title">
         <h5>Cards</h5>
         <a class="close" href="#">
           <i class="mdi-content-clear"></i>
@@ -39,13 +39,115 @@
           <i class="mdi-navigation-expand-less"></i>
         </a>
       </div>
-      <div class="content mail-card">
-
-        <div class="btn waves-effect waves-blue">Check</div>
-        <div class="btn waves-effect waves-blue">Points</div>
-        <div class="btn waves-effect waves-blue">Disable</div>
-        
+      <div class="content mail-card" ng-if="actions.cards.check != true && actions.cards.points != true && actions.cards.disable != true">
+        <div class="btn waves-effect waves-blue" ng-click="actions.cards.check = true">Check</div>
+        <div class="btn waves-effect waves-blue" ng-click="actions.cards.points = true">Points</div>
+        <div class="btn waves-effect waves-blue" ng-click="actions.cards.disable = true">Disable</div>
       </div>
+      
+      <!-- Disable Card -->
+      <div class="content disable-card" ng-if="actions.cards.disable == true">
+        <div class="row">
+          <div class="col s12">
+            <a class="btn btn-extra full-btn {{ card.disable_card.css }}" ng-click="disableCard(card.disable_card)">
+              <i class="fa fa-credit-card"></i>
+              {{ card.disable_card.label }}
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <a class="btn full-btn" ng-click="actions.cards.disable = false">
+              <i class="fa fa-chevron-left"></i>
+              Back
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- End Disable Card -->
+      
+      <!-- Points -->
+      <div class="content add-remove-points" ng-if="actions.cards.points == true">
+        <div class="row">
+          <div class="col s12">
+            <a class="btn btn-extra full-btn {{ card.add_point.css }}" ng-click="addPoint()">
+              <i class="fa fa-credit-card"></i>
+              {{ card.add_point.label }}
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <div class="input-field">
+              <input id="add_points" type="text" class="validate" placeholder="e.g. 90 or -90" ng-model="add_point.points">
+              <label for="add_points">Points</label>
+            </div>
+          </div>
+          <div class="col s12">
+            <div class="input-field">
+              <input id="add_points" type="text" class="validate" placeholder="" ng-model="add_point.reason">
+              <label for="add_points">Reason</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <a class="btn full-btn" ng-click="actions.cards.points = false">
+              <i class="fa fa-chevron-left"></i>
+              Back
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- End Points -->
+      
+      <!-- Check Card -->
+      <div class="content check-points" ng-if="actions.cards.check == true" ng-init="actions.cards.checkCard(card, 'check_point')">
+        <div class="row">
+          <div class="col s12">
+            <a class="btn btn-extra full-btn {{ card.check_point.css }}" ng-click="actions.cards.checkCard(card, 'check_point')">
+              <i class="fa fa-credit-card"></i>
+              {{ card.check_point.label }}
+            </a>
+          </div>
+        </div>
+        <div class="row details">
+          <div class="col s12">
+            <strong>Card ID:</strong>
+            <span>{{card.check_point.id}}</span>
+          </div>
+          <div class="col s12">
+            <strong>Points:</strong>
+            <span>{{ (card.check_point.points) ? card.check_point.points:0}}</span>
+          </div>
+          <div class="col s12">
+            <strong>Name:</strong>
+            <span>{{card.check_point.data.person.name}}</span>
+          </div>
+          <div class="col s12">
+            <strong>Event:</strong>
+            <a href="#" ng-repeat="event in card.check_point.data.events">{{event.name}}</a>
+          </div>
+          <div class="col s12">
+            <strong>Access:</strong>
+            <a href="#" ng-repeat="access in card.check_point.data.access">{{access.name}}</a>
+          </div>
+          <div class="col s12">
+            <strong>Active:</strong>
+            <span>{{ card.check_point.data.active }} </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <a class="btn full-btn" ng-click="actions.cards.check = false">
+              <i class="fa fa-chevron-left"></i>
+              Back
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- End Check Card -->
+      
     </div>
   </div>
   
@@ -60,50 +162,86 @@
           <i class="mdi-navigation-expand-less"></i>
         </a>
       </div>
-      <div class="content mail-card">
-
-        <div class="btn waves-effect waves-blue">Register</div>
-        <div class="btn waves-effect waves-blue">Activate Card</div>
-        <div class="btn waves-effect waves-blue">Event</div>
-        
+      <div class="content mail-card" ng-if="actions.participants.event != true && actions.participants.event_card != true && actions.participants.redeem != true">
+        <div class="btn waves-effect waves-blue" ng-click="actions.participants.event = true">Event</div>
+        <div class="btn waves-effect waves-blue" ng-click="actions.participants.redeem = true">Redeem</div>
+      </div>
+      <div class="content" ng-if="actions.participants.redeem == true">
+        <div class="row" ng-init="redeem()">
+          <div class="col s12">
+            <a class="btn btn-extra full-btn {{ card.redeem.css }}" ng-click="redeem()">
+              <i class="fa fa-credit-card"></i>
+              {{ card.redeem.label }}
+            </a>
+            <div class="alert" ng-if="card.redeem.server_status == 'error'">{{ card.redeem.server_message }}</div>
+            <div class="alert green lighten-4 green-text text-darken-2" ng-if="card.redeem.server_status == 'ok'">{{ card.redeem.server_message }}</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <a class="btn full-btn" ng-click="actions.participants.redeem = false">
+              <i class="fa fa-chevron-left"></i>
+              Back
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="content" ng-if="actions.participants.event == true">
+        <div class="row">
+          <div class="col s12">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Event Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-if="events == undefined">
+                  <td colspan="3">
+                    <div class="card-panel loading" style="display:none">
+                      <p class="center"><i class="fa fa-spinner fa-pulse"></i> Loading</p>
+                    </div>
+                  </td>
+                </tr>
+                <tr ng-repeat="event in events">
+                  <td><a href="#" ng-click="selectEvent(event)">{{event.name}}</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <a class="btn full-btn" ng-click="actions.participants.event = false; actions.participants.event_card = true">
+              <i class="fa fa-chevron-left"></i>
+              Back
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="content" ng-if="actions.participants.event_card == true">
+        <div class="row">
+          <div class="col s12">
+            <a class="btn btn-extra full-btn {{ card.add_event.css }}" ng-click="addEvent(card, 'add_event')">
+              <i class="fa fa-credit-card"></i>
+              {{ card.add_event.label }}
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <a class="btn full-btn" ng-click="actions.participants.event_card = false">
+              <i class="fa fa-chevron-left"></i>
+              Back
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   
-  <div class="col l4 s12">
-    <div class="card actions">
-      <div class="title">
-        <h5>Card</h5>
-        <a class="close" href="#">
-          <i class="mdi-content-clear"></i>
-        </a>
-        <a class="minimize" href="#">
-          <i class="mdi-navigation-expand-less"></i>
-        </a>
-      </div>
-      <div class="content mail-card">
-
-        <div class="row waves-effect waves-blue">
-          <a href="#" class="">
-            <i class="fa fa-search"></i>
-            <strong>Check</strong>
-          </a>
-        </div>
-        <!-- lalalalla -->
-        <hr>
-
-        <div class="row">
-          <a href="#" class=" waves-effect waves-blue">
-            <i class="fa fa-dollar"></i>
-            <strong>Points</strong>
-          </a>
-        </div>
-
-      </div>
-    </div>
-  </div>
 </div>
-
+<!--
 <div class="row dashboard-actions">
   <div class="col s6">
     <div class="add-points card-panel stats-card amber lighten-2 amber-text text-lighten-5">
@@ -134,196 +272,4 @@
   </div>
   
 </div>
-
-<div class="row">
-  <div class="card-panel" ng-show="is_person_selected || create_user">
-      <h4>Edit</h4>
-      <form ng-submit="saveUser()">
-          <div class="row">
-              <div class="col m12 s12">
-                  <div class="input-field">
-                    <input type="text" class="validate" ng-model="selected_person[column_names[0].column]">
-                    <label for="input_text">{{ column_names[0].name }}</label>
-                  </div>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col m6 s12">
-                  <div class="input-field">
-                      <i class="fa fa-envelope prefix"></i>
-                      <input type="email" ng-model="selected_person[column_names[1].column]">
-                      <label for="input_email">{{ column_names[1].name }}</label>
-                  </div>
-              </div>
-              <div class="col m6 s12">
-                  <div class="input-field">
-                      <i class="fa fa-phone prefix"></i>
-                      <input type="tel" ng-model="selected_person[column_names[2].column]">
-                      <label for="input_email">{{ column_names[2].name }}</label>
-                  </div>
-              </div>
-          </div>
-
-          <div class="row">
-              <div class="col m6 s12">
-                  <div class="input-field">
-                    <input type="text" class="validate" ng-model="selected_person[column_names[3].column]">
-                    <label for="input_text">{{ column_names[3].name }}</label>
-                  </div>
-              </div>
-              <div class="col m6 s12">
-                  <div class="input-field">
-                    <p>
-                      <input type="radio" id="paid" value="1" ng-model="selected_person[column_names[4].column]" />
-                      <label for="paid">PAID</label>
-                      <input type="radio" id="unpaid" value="0" ng-model="selected_person[column_names[4].column]" />
-                      <label for="unpaid">UNPAID</label>
-                      <input type="radio" id="refund" value="2" ng-model="selected_person[column_names[4].column]" />
-                      <label for="refund">REFUND</label>
-                    </p>
-                  </div>
-              </div>
-        </div>
-
-          <div class="row">
-              <div class="col m6 s12">
-                  <div class="input-field">
-                    <input type="text" class="validate" ng-model="selected_person[column_names[5].column]">
-                    <label for="input_text">{{ column_names[5].name }}</label>
-                  </div>
-              </div>
-              <div class="col m6 s12">
-                  <div class="input-field">
-                    <input type="text" class="validate" ng-model="selected_person[column_names[6].column]">
-                    <label for="input_text">{{ column_names[6].name }}</label>
-                  </div>
-              </div>
-          </div>
-
-          <div class="row">
-              <div class="col m6 s12">
-                  <div class="input-field">
-                    <input type="text" class="validate" ng-model="selected_person[column_names[8].column]">
-                    <label for="input_text">{{ column_names[8].name }}</label>
-                  </div>
-              </div>
-              <div class="col m6 s12">
-                  <div class="input-field">
-                    <input type="text" class="validate" ng-model="selected_person[column_names[9].column]">
-                    <label for="input_text">{{ column_names[9].name }}sdsd</label>
-                  </div>
-              </div>
-          </div>
-
-          <div class="row">
-              <div class="col">
-                  <button class="btn" type="submit" name="action">Save</button>
-                  <a class="btn" ng-click="closeEditAdd()">Close</a>
-                  <a class="waves-effect waves-dark btn red modal-trigger" href="#deleteModal" ng-click="deleteModal()">Delete</a>
-              </div>
-          </div>
-      </form>
-  </div>
-</div>
-
-<!-- With Search -->
-<div class="card-panel row" ng-show="is_person_selected == false && create_user == false">
-  <div class="col s5">
-    <h4>Registration <a class="btn-floating red waves-effect btn-small" ng-click="create_user = true"><i class="mdi-content-add"></i></a></h4>
-  </div>
-  <div class="col s7">
-      <form action="#!">
-        <div class="input-field mail-search">
-          <i class="mdi-action-search prefix"></i>
-          <input id="mail_search" type="text" name="mail_search" ng-model="searchTablesData">
-          <label for="mail_search">Search</label>
-          <!--a class="btn">Search</a-->
-        </div>
-      </form>
-  </div>
-  <div ng-show="alert.show" ng-class="{'alert alert-dismissible green lighten-4 green-text text-darken-2':(alert.status == 'ok'), 'alert alert-dismissible':(alert.status == 'error')}">
-      <span>{{ alert.message }}</span>
-      <button class="close">&times;</button>
-   </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th ng-repeat="column in column_names" ng-show="column.display != false">{{column.name}}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-if="tablesData.length == 0 || tablesData == undefined">
-        <td colspan="{{displayable_columns}}" class="loading">
-          <span>Loading</span>
-          <div class="preloader-wrapper small active">
-              <div class="spinner-layer spinner-blue">
-                <div class="circle-clipper left">
-                  <div class="circle"></div>
-                </div>
-                <div class="gap-patch">
-                  <div class="circle"></div>
-                </div>
-                <div class="circle-clipper right">
-                  <div class="circle"></div>
-                </div>
-              </div>
-
-              <div class="spinner-layer spinner-red">
-                <div class="circle-clipper left">
-                  <div class="circle"></div>
-                </div>
-                <div class="gap-patch">
-                  <div class="circle"></div>
-                </div>
-                <div class="circle-clipper right">
-                  <div class="circle"></div>
-                </div>
-              </div>
-
-              <div class="spinner-layer spinner-yellow">
-                <div class="circle-clipper left">
-                  <div class="circle"></div>
-                </div>
-                <div class="gap-patch">
-                  <div class="circle"></div>
-                </div>
-                <div class="circle-clipper right">
-                  <div class="circle"></div>
-                </div>
-              </div>
-
-              <div class="spinner-layer spinner-green">
-                <div class="circle-clipper left">
-                  <div class="circle"></div>
-                </div>
-                <div class="gap-patch">
-                  <div class="circle"></div>
-                </div>
-                <div class="circle-clipper right">
-                  <div class="circle"></div>
-                </div>
-              </div>
-            </div>
-        </td>
-      </tr>
-      <tr ng-repeat="person in tablesData1 | filter:searchTablesData1">
-        <td ng-click="select_person(person)"><a href="#">{{ person.name }}</a></td>
-        <td>{{ person.phone }}</td>
-        <td>{{ person.dci }}</td>
-        <td>
-            <div ng-class="{'paid amber lighten-3 accent-4 text-darken-2':(person.paid == 2), 'paid light-green accent-4 text-darken-2':(person.paid == 1), 'red accent-4 unpaid text-darken-2': (person.paid == 0)}">
-                <i ng-class="{'fa fa-check':(person.paid == 1), 'fa fa-remove':(person.paid == 0)}"></i>
-                {{ (person.paid == 1) ? 'PAID':'UNPAID'}}
-            </div>
-        </td>
-        <td>{{ person.country }}</td>
-        <td>{{ person.type }}</td>
-        <td>
-          <a href="#" ng-if="person.cards.length == 0" ng-click="activateCard(person)">{{ (!person.card) ? 'Activate':person.card }}</a>
-          <i class="fa fa-check-circle" ng-if="person.cards.length != 0"></i>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<!-- /With Search -->
+-->

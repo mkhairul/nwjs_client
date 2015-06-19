@@ -189,7 +189,21 @@ conAngular.controller('AppController', ['$scope', '$rootScope', '$state', functi
 }]);
 
 // Navbar Controller
-conAngular.controller('NavbarController', ['$scope', function($scope) {
+conAngular.controller('NavbarController', ['$rootScope','$scope', function($rootScope, $scope) {
+  var gui = require('nw.gui');
+  var win = gui.Window.get();
+  
+  $rootScope.access_cache = {};
+  $rootScope.access_cache.username = sessionStorage.username;
+  $rootScope.access_cache.password = sessionStorage.password;
+  $rootScope.access_cache.name = sessionStorage.name;
+  $rootScope.access_cache.key = sessionStorage.key;
+  console.log($rootScope.access_cache);
+  
+  $scope.closeApp = function(){
+    console.log('trying to close');
+    win.close();
+  }
   $scope.$on('$includeContentLoaded', function() {
   });
 }]);
@@ -450,6 +464,66 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
           }]
       }
     })
+  
+    .state('/register', {
+      url: "/register.html",
+      templateUrl: "tpl/register.html",
+      controller: "RegisterController",
+      data: {
+        pageTitle: 'Registration',
+        crumbs: [{
+            title: '<i class="fa fa-home"></i> Home',
+            href: '#'
+          }, {
+            title: 'Registration',
+            href: '#/register.html'
+          }]
+      },
+      resolve: {
+        deps: ['$ocLazyLoad', function($ocLazyLoad) {
+          return $ocLazyLoad.load([{
+            name: 'conAngular',
+            insertBefore: '#ngInsertBefore', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+            files: conAssets('simpleWeather,sortable')
+          }, {
+            name: 'conAngular',
+            serie: true, // used for synchronous load chart scripts
+            insertBefore: '#ngInsertBefore',
+            files: conAssets('dataTables,sparkline,flot,rickshaw,jvectormap')
+          }]);
+        }]
+      }
+    })
+  
+    .state('/transaction', {
+      url: "/transaction.html",
+      templateUrl: "tpl/transaction.html",
+      controller: "TransactionController",
+      data: {
+        pageTitle: 'Transaction',
+        crumbs: [{
+            title: '<i class="fa fa-home"></i> Home',
+            href: '#'
+          }, {
+            title: 'Transaction',
+            href: '#/transaction.html'
+          }]
+      },
+      resolve: {
+        deps: ['$ocLazyLoad', function($ocLazyLoad) {
+          return $ocLazyLoad.load([{
+            name: 'conAngular',
+            insertBefore: '#ngInsertBefore', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+            files: conAssets('simpleWeather,sortable')
+          }, {
+            name: 'conAngular',
+            serie: true, // used for synchronous load chart scripts
+            insertBefore: '#ngInsertBefore',
+            files: conAssets('dataTables,sparkline,flot,rickshaw,jvectormap')
+          }]);
+        }]
+      }
+    })
 
 
 }]);
@@ -457,5 +531,6 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
 /* Init global settings and run the app */
 conAngular.run(["$rootScope", "settings", "$state", function($rootScope, settings, $state) {
   $rootScope.$state = $state; // state to be accessed from view
-  $rootScope.url = 'http://localhost:7777/rfid_server/public';
+  $rootScope.url = sessionStorage.url;
+  
 }]);

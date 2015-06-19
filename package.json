@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "dist/angularjs/login.html",
   "window":{
-    "kiosk": true,
+    "kiosk": false,
     "toolbar": true
   }
 }

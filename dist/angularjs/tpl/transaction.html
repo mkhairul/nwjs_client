@@ -1,0 +1,76 @@
+<div class="page-title" data-ng-include="'tpl/parts/breadcrumbs.html'"></div>
+
+<div class="row card-panel">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Card UID</th>
+        <th>Points</th>
+        <th>Notes</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-if="transactions == undefined">
+        <td colspan="5" class="loading">
+          <span>Loading</span>
+          <div class="preloader-wrapper small active">
+              <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+
+              <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+
+              <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+
+              <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+        </td>
+      </tr>
+      <tr ng-repeat="row in transactions">
+        <td>{{ row.uid }}</td>
+        <td>{{ row.amount }}</td>
+        <td>{{ row.notes }}</td>
+        <td><a href="#" ng-click="deleteData(row)">Delete</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

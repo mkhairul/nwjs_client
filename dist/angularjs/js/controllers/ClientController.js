@@ -23,5 +23,16 @@ conAngular.controller('ClientController', function($rootScope, $scope, $http, $t
       });
   }
   
+  $scope.enableDisable = function(client){
+    var enable = (client.enabled == 1) ? 0:1;
+    $http.post($rootScope.url + '/client/enable', {'id':client.id, 'enable':enable}).
+      success(function(data, status, headers, config) {
+        retrieveClientData();
+      }).
+      error(function(data, status, headers, config){
+        
+      });
+  }
+  
   $scope.new = function(){ $scope.new = true; }
 });

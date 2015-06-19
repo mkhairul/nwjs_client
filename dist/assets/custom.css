@@ -64,4 +64,7 @@
 .actions div.btn{ display: block; margin-bottom: 10px;  }
 .actions a strong{ vertical-align: middle; }
 .actions a i.fa{ margin-right: 3px; }
-/* test 123 */
+.details .col{
+  padding-bottom: 0;
+}
+.details{ padding-bottom: 10px; }

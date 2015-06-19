@@ -1,0 +1,197 @@
+<div class="page-title" data-ng-include="'tpl/parts/breadcrumbs.html'"></div>
+
+<div class="row">
+  <div class="card-panel" ng-show="is_person_selected || create_user">
+      <h4>Edit</h4>
+      <form ng-submit="saveUser()">
+          <div class="row">
+              <div class="col m12 s12">
+                  <div class="input-field">
+                    <input type="text" class="validate" ng-model="selected_person[column_names[0].column]">
+                    <label for="input_text">{{ column_names[0].name }}</label>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col m6 s12">
+                  <div class="input-field">
+                      <i class="fa fa-envelope prefix"></i>
+                      <input type="email" ng-model="selected_person[column_names[1].column]">
+                      <label for="input_email">{{ column_names[1].name }}</label>
+                  </div>
+              </div>
+              <div class="col m6 s12">
+                  <div class="input-field">
+                      <i class="fa fa-phone prefix"></i>
+                      <input type="tel" ng-model="selected_person[column_names[2].column]">
+                      <label for="input_email">{{ column_names[2].name }}</label>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col m6 s12">
+                  <div class="input-field">
+                    <input type="text" class="validate" ng-model="selected_person[column_names[3].column]">
+                    <label for="input_text">{{ column_names[3].name }}</label>
+                  </div>
+              </div>
+              <div class="col m6 s12">
+                  <div class="input-field">
+                    <p>
+                      <input type="radio" id="paid" value="1" ng-model="selected_person[column_names[4].column]" checked />
+                      <label for="paid">PAID</label>
+                      <input type="radio" id="unpaid" value="0" ng-model="selected_person[column_names[4].column]" />
+                      <label for="unpaid">UNPAID</label>
+                      <input type="radio" id="refund" value="2" ng-model="selected_person[column_names[4].column]" />
+                      <label for="refund">REFUND</label>
+                    </p>
+                  </div>
+              </div>
+        </div>
+
+          <div class="row" style="display: none">
+              <div class="col m6 s12">
+                  <div class="input-field">
+                    <input type="text" class="validate" ng-model="selected_person[column_names[5].column]" ng-init="selected_person[column_names[5].column] = 'on-site'">
+                    <label for="input_text">{{ column_names[5].name }}</label>
+                  </div>
+              </div>
+              <div class="col m6 s12">
+                  <div class="input-field">
+                    <input type="text" class="validate" ng-model="selected_person[column_names[6].column]">
+                    <label for="input_text">{{ column_names[6].name }}</label>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col m6 s12">
+                  <div class="input-field">
+                    <input type="text" class="validate" ng-model="selected_person[column_names[8].column]">
+                    <label for="input_text">{{ column_names[8].name }}</label>
+                  </div>
+              </div>
+              <div class="col m6 s12">
+                  <div class="input-field">
+                    <input type="text" class="validate" ng-model="selected_person[column_names[9].column]">
+                    <label for="input_text">{{ column_names[9].name }}</label>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col">
+                  <button class="btn" type="submit" name="action">Save</button>
+                  <a class="btn" ng-click="closeEditAdd()">Close</a>
+                  <a class="waves-effect waves-dark btn red modal-trigger" href="#deleteModal" ng-click="deleteModal()">Delete</a>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>
+
+<div class="row" ng-if="alert.show">
+  <div ng-show="alert.show" ng-class="{'alert alert-dismissible green lighten-4 green-text text-darken-2':(alert.status == 'ok'), 'alert alert-dismissible':(alert.status == 'error')}">
+      <span>{{ alert.message }}</span>
+      <button class="close">&times;</button>
+   </div>
+</div>
+
+<!-- With Search -->
+<div class="card-panel row" ng-show="is_person_selected == false && create_user == false">
+  <div class="col s5">
+    <h4>Registration <a class="btn-floating red waves-effect btn-small" ng-click="create_user = true"><i class="mdi-content-add"></i></a></h4>
+  </div>
+  <div class="col s7">
+      <form action="#!">
+        <div class="input-field mail-search">
+          <i class="mdi-action-search prefix"></i>
+          <input id="mail_search" type="text" name="mail_search" ng-model="searchTablesData">
+          <label for="mail_search">Search</label>
+          <!--a class="btn">Search</a-->
+        </div>
+      </form>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th ng-repeat="column in column_names" ng-show="column.display != false">{{column.name}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-if="tablesData.length == 0 || tablesData == undefined">
+        <td colspan="{{displayable_columns}}" class="loading">
+          <span>Loading</span>
+          <div class="preloader-wrapper small active">
+              <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+
+              <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+
+              <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+
+              <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+        </td>
+      </tr>
+      <tr ng-repeat="person in tablesData | filter:searchTablesData">
+        <td ng-click="select_person(person)"><a href="#">{{ person.name }}</a></td>
+        <td>{{ person.phone }}</td>
+        <td>{{ person.dci }}</td>
+        <td>
+            <div ng-class="{'paid amber lighten-3 accent-4 text-darken-2':(person.paid == 2), 'paid light-green accent-4 text-darken-2':(person.paid == 1), 'red accent-4 unpaid text-darken-2': (person.paid == 0)}">
+                <i ng-class="{'fa fa-check':(person.paid == 1), 'fa fa-remove':(person.paid == 0)}"></i>
+                {{ (person.paid == 1) ? 'PAID':'UNPAID'}}
+            </div>
+        </td>
+        <td>{{ person.country }}</td>
+        <td>{{ person.type }}</td>
+        <td>
+          <a href="#" ng-if="person.cards.length == 0" ng-click="activateCard(person)">{{ (!person.card) ? 'Activate':person.card }}</a>
+          <i class="fa fa-check-circle" ng-if="person.cards.length != 0"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- /With Search -->
