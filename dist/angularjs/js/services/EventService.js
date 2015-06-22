@@ -2,7 +2,7 @@ conAngular.factory('EventService', ['$rootScope', '$compile', '$window', '$http'
   var obj = {}
   
   obj.get = function($scope, varname){
-    $http.get($rootScope.url + '/events').
+    $http.get($rootScope.url + '/event/players').
     success(function(data, status, headers, config) {
         $scope[varname] = data;
       }).

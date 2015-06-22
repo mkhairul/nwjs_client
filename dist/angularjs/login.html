@@ -212,7 +212,6 @@
     
     var toggleLoading = function(obj){
       console.log('Toggle Loading')
-      console.log(obj);
       if($(obj).closest('form').children('.loading').css('display') == 'none')
       {
         console.log('Display Loading')
@@ -228,15 +227,17 @@
     }
     
     var loadSettings = function(){
-      var data 
+      
+      var data = '';
       try{
         data = fs.readFileSync(process.cwd() + '/settings', { encoding: 'utf8'});
       } catch (e) {
         console.log(e);
       }
+      console.log(data);
+      
       var settings = YAML.parse(data);
       if(settings.server.url == '' || settings.server.url == undefined){ settings = false; }
-      if(settings.client.name == '' || settings.client.name == undefined){ settings =  false; }
       return settings;
     }
     
@@ -287,8 +288,7 @@
       $(self).closest('form').children('.alert').hide();
       
       // Check if the server url is correct / connectable
-      $.get(settings.server.url + '/connect-test', function(data){
-        toggleLoading(self)
+      $.get($('#server-url').val() + '/connect-test', function(data){
         console.log('url is connectable');
         var tmp_settings = {};
         tmp_settings.server = {}
@@ -302,6 +302,7 @@
             return console.log(err);
           }
           console.log('File saved');
+          toggleLoading(self)
           $('.login-form').show();
           $('.login-settings').hide();
           settings = loadSettings();

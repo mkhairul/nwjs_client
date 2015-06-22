@@ -44,12 +44,14 @@
 </div>
 
 <div class="row" ng-if="new_event != true">
+  <div class="col s12">
   <h4>Events <a class="btn-floating red waves-effect btn-small" ng-click="newEvent()"><i class="mdi-content-add"></i></a></h4>
   <table class="table">
     <thead>
       <tr>
         <th>Event Name</th>
         <th>Points Required</th>
+        <th>Players</th>
         <th>Enabled</th>
       </tr>
     </thead>
@@ -57,8 +59,10 @@
       <tr ng-repeat="event in events">
         <td>{{event.name}}</td>
         <td>{{event.price}}</td>
+        <td><a href="#">{{ (event.cards.length > 0) ? event.cards.length:0 }}</a></td>
         <td>{{event.enabled}}</td>
       </tr>
     </tbody>
   </table>
+  </div>
 </div>

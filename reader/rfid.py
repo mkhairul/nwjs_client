@@ -2,9 +2,14 @@ import ctypes
 from ctypes.wintypes import *
 import sys
 import time
+import argparse
+
+parser = argparse.ArgumentParser(description='Get the UID of the card.')
+parser.add_argument('--port', required=False, metavar='p', type=int, default=3, help='com port of the attached device')
+args = parser.parse_args()
 
 RESULT_OK = 0
-rfid_port = 3 #COM3
+rfid_port = args.port # default COM3
 
 lib = ctypes.WinDLL('EMR300DLL.dll')
 rfid_open_port = lib['EMR300_ComOpen']
