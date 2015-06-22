@@ -297,7 +297,18 @@
         tmp_settings.client.name = $('#client-name').val();
         tmp_settings.client.key = $('#client-key').val();
         YAMLString = YAML.stringify(tmp_settings, 4);
-        fs.writeFile(process.cwd() + '/settings', YAMLString, function(err){
+        try{
+          fs.writeFileSync(process.cwd() + '/settings', YAMLString);
+          console.log('File saved');
+          toggleLoading(self)
+          $('.login-form').show();
+          $('.login-settings').hide();
+          settings = loadSettings();
+        } catch (e) {
+          console.log(e);
+        }  
+        /*  
+        fs.writeFileSync(process.cwd() + '/settings', YAMLString, function(err){
           if(err){
             return console.log(err);
           }
@@ -307,6 +318,7 @@
           $('.login-settings').hide();
           settings = loadSettings();
         })
+        */
         
       }, 'json').fail(function(){
         console.log('error');

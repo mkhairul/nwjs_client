@@ -206,6 +206,14 @@ conAngular.factory('CardService', ['$rootScope', '$compile', '$window', '$http',
       }).
       error(function(data, status, headers, config){
         console.log('error checking card');
+        if(name != undefined)
+        {
+          obj.inactive(name);
+        }
+        else
+        {
+          obj.inactive();
+        }
       })
   }
   
