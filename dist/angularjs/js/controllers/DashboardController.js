@@ -52,7 +52,7 @@ conAngular.controller('DashboardController', function($state, $rootScope, $scope
       return false; 
     }
     
-    card.active(name);
+    $scope.card.active(name);
     RFIDService.get_uid(card[name], function(){
       $scope.card.processing(name);
       console.log('change to processing');

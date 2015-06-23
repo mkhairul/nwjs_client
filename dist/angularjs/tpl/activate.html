@@ -81,6 +81,8 @@
       <i class="fa fa-credit-card"></i>
       {{ card.label }}
     </a>
+    <div class="alert" ng-if="card.server_status == 'error'">{{ card.server_message }}</div>
+    <div class="alert green lighten-4 green-text text-darken-2" ng-if="card.server_status == 'ok'">{{ card.server_message }}</div>
   </div>
 </div>
 

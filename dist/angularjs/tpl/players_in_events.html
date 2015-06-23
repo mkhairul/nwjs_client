@@ -1,0 +1,23 @@
+<div class="page-title" data-ng-include="'tpl/parts/breadcrumbs.html'"></div>
+
+<div class="row" ng-if="new_event != true">
+  <div class="col s12">
+  <h4>Players in {{ selected_event.name }}</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Player Name</th>
+        <th>DCI</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="player in players">
+        <td>{{player.register.name}}</td>
+        <td>{{player.register.dci}}</td>
+        <td><a href="#" ng-click="removePlayer(player)">Delete</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>

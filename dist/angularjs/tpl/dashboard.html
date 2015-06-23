@@ -2,14 +2,6 @@
 <div class="page-title" data-ng-include="'tpl/parts/breadcrumbs.html'"></div>
 <!-- /Breadcrumbs -->
 
-<div class="row" ng-if="card.remove_point.server_status == 'error' || card.add_point.server_status == 'error'">
-  <div class="col s12 m12 l12"></div>
-  <div class="alert alert-dismissible">
-    {{ (card.remove_point.server_status == 'error') ? card.remove_point.server_message:card.add_point.server_message  }}
-    <button class="close" ng-click="card.remove_point.server_status = ''; card.add_point.server_status = ''">&times;</button>
-  </div>
-</div>
-
 <div class="row">
   <div class="col s12 m6 l6">
     <div class="card-panel stats-card blue blue-text text-lighten-5">
@@ -47,12 +39,15 @@
       
       <!-- Disable Card -->
       <div class="content disable-card" ng-if="actions.cards.disable == true">
+        
         <div class="row">
           <div class="col s12">
             <a class="btn btn-extra full-btn {{ card.disable_card.css }}" ng-click="disableCard(card.disable_card)">
               <i class="fa fa-credit-card"></i>
               {{ card.disable_card.label }}
             </a>
+            <div class="alert" ng-if="card.disable_card.server_status == 'error'">{{ card.disable_card.server_message }}</div>
+            <div class="alert green lighten-4 green-text text-darken-2" ng-if="card.disable_card.server_status == 'ok'">{{ card.disable_card.server_message }}</div>
           </div>
         </div>
         <div class="row">
@@ -74,12 +69,14 @@
               <i class="fa fa-credit-card"></i>
               {{ card.add_point.label }}
             </a>
+            <div class="alert" ng-if="card.add_point.server_status == 'error'">{{ card.add_point.server_message }}</div>
+            <div class="alert green lighten-4 green-text text-darken-2" ng-if="card.add_point.server_status == 'ok'">{{ card.add_point.server_message }}</div>
           </div>
         </div>
         <div class="row">
           <div class="col s12">
             <div class="input-field">
-              <input id="add_points" type="text" class="validate" placeholder="e.g. 90 or -90" ng-model="add_point.points">
+              <input id="add_points" type="text" class="validate" placeholder="" ng-model="add_point.points">
               <label for="add_points">Points</label>
             </div>
           </div>
@@ -126,7 +123,10 @@
           </div>
           <div class="col s12">
             <strong>Event:</strong>
-            <a href="#" ng-repeat="event in card.check_point.data.events">{{event.name}}</a>
+            <a href="#" ng-repeat="event in card.check_point.data.events">
+                {{event.name}}{{$last ? '' : ', '}}
+                
+            </a>
           </div>
           <div class="col s12">
             <strong>Access:</strong>
@@ -186,6 +186,8 @@
           </div>
         </div>
       </div>
+        
+      <!-- Add Event -->
       <div class="content" ng-if="actions.participants.event == true">
         <div class="row">
           <div class="col s12">
@@ -226,6 +228,8 @@
               <i class="fa fa-credit-card"></i>
               {{ card.add_event.label }}
             </a>
+            <div class="alert" ng-if="card.add_event.server_status == 'error'">{{ card.add_event.server_message }}</div>
+            <div class="alert green lighten-4 green-text text-darken-2" ng-if="card.add_event.server_status == 'ok'">{{ card.add_event.server_message }}</div>
           </div>
         </div>
         <div class="row">
@@ -237,6 +241,8 @@
           </div>
         </div>
       </div>
+      <!-- End Add Event -->
+        
     </div>
   </div>
   

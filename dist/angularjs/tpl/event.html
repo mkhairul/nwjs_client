@@ -59,7 +59,7 @@
       <tr ng-repeat="event in events">
         <td>{{event.name}}</td>
         <td>{{event.price}}</td>
-        <td><a href="#">{{ (event.cards.length > 0) ? event.cards.length:0 }}</a></td>
+        <td><a href="#" ng-click="viewPlayers(event)">{{ (event.cards.length > 0) ? event.cards.length:0 }}</a></td>
         <td>{{event.enabled}}</td>
       </tr>
     </tbody>

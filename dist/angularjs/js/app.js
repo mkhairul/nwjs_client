@@ -464,6 +464,68 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
           }]
       }
     })
+    
+    /*
+    .state('/players_in_events', {
+      url: "/players_in_events.html",
+      templateUrl: "tpl/players_in_events.html",
+      controller: "PlayerEventController",
+      data: {
+        pageTitle: 'Players in Event',
+        crumbs: [{
+            title: '<i class="fa fa-home"></i> Home',
+            href: '#'
+          }, {
+            title: 'Players in Event',
+            href: '#/players_in_events.html'
+          }]
+      },
+      resolve: {
+        deps: ['$ocLazyLoad', function($ocLazyLoad) {
+          return $ocLazyLoad.load([{
+            name: 'conAngular',
+            insertBefore: '#ngInsertBefore', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+            files: conAssets('simpleWeather,sortable')
+          }, {
+            name: 'conAngular',
+            serie: true, // used for synchronous load chart scripts
+            insertBefore: '#ngInsertBefore',
+            files: conAssets('dataTables,sparkline,flot,rickshaw,jvectormap')
+          }]);
+        }]
+      }
+    })*/
+  
+    .state('/players_in_events', {
+      url: "/players_in_events.html",
+      templateUrl: "tpl/players_in_events.html",
+      controller: "PlayerEventController",
+      data: {
+        pageTitle: 'Players in Event',
+        crumbs: [{
+            title: '<i class="fa fa-home"></i> Home',
+            href: '#'
+          }, {
+            title: 'Players in Event',
+            href: '#/players_in_events.html'
+          }]
+      },
+      resolve: {
+        deps: ['$ocLazyLoad', function($ocLazyLoad) {
+          return $ocLazyLoad.load([{
+            name: 'conAngular',
+            insertBefore: '#ngInsertBefore', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+            files: conAssets('simpleWeather,sortable')
+          }, {
+            name: 'conAngular',
+            serie: true, // used for synchronous load chart scripts
+            insertBefore: '#ngInsertBefore',
+            files: conAssets('dataTables,sparkline,flot,rickshaw,jvectormap')
+          }]);
+        }]
+      }
+    })
+    
   
     .state('/register', {
       url: "/register.html",
@@ -532,5 +594,5 @@ conAngular.config(['$stateProvider', '$urlRouterProvider', function($stateProvid
 conAngular.run(["$rootScope", "settings", "$state", function($rootScope, settings, $state) {
   $rootScope.$state = $state; // state to be accessed from view
   $rootScope.url = sessionStorage.url;
-  
+  $rootScope.comport = sessionStorage.comport;
 }]);

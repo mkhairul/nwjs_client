@@ -2,6 +2,15 @@
 
 
 <div class="row card-panel">
+  <div class="col s12">
+    <form action="#!">
+      <div class="input-field mail-search">
+        <i class="mdi-action-search prefix"></i>
+        <input id="mail_search" type="text" name="mail_search" ng-model="searchTablesData">
+        <label for="mail_search">Search</label>
+      </div>
+    </form>
+  </div>
   <table class="table">
     <thead>
       <tr>
@@ -67,7 +76,7 @@
             </div>
         </td>
       </tr>
-      <tr ng-repeat="row in card.card_list">
+      <tr ng-repeat="row in card.card_list | filter:searchTablesData">
         <td>{{ row.uid }}</td>
         <td>{{ row.register.name }}</td>
         <td>{{ row.register.dci }}</td>

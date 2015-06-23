@@ -6,7 +6,7 @@ conAngular.factory('RFIDService', ['$rootScope', '$compile', '$window', '$http',
       fs.exists(process.cwd() + '/reader/dist/rfid.exe', function (exists) {
         console.log(exists ? "rfid.exe it's there" : "no rfid.exe!");
       });
-      child_process.exec('rfid.exe', {cwd:process.cwd() + '/reader/dist'}, function (err, stdout, stderr){
+      child_process.exec('rfid.exe --port ' + $rootScope.comport, {cwd:process.cwd() + '/reader/dist'}, function (err, stdout, stderr){
           console.log('stdout: ' + stdout);
           console.log('stderr: ' + stderr);
           if (err) {
